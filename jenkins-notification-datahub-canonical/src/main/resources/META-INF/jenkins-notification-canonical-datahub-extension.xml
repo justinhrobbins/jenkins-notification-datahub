@@ -1,0 +1,86 @@
+<!--
+  ~ [y] hybris Platform
+  ~
+  ~ Copyright (c) 2000-2014 hybris AG
+  ~ All rights reserved.
+  ~
+  ~ This software is the confidential and proprietary information of hybris
+  ~ ("Confidential Information"). You shall not disclose such Confidential
+  ~ Information and shall use it only in accordance with the terms of the
+  ~ license agreement you entered into with hybris.
+  -->
+<extension xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.hybris.com/schema/"
+		   xsi:schemaLocation="http://www.hybris.com/schema/ datahub-metadata-schema-1.1.0.xsd" name="jenkins-notification-datahub-canonical">
+
+	<canonicalItems>
+		<item>
+			<type>JenkinsNotificationCanonicalItem</type>
+			<status>ACTIVE</status>
+			<attributes>
+				<attribute>
+					<name>name</name>
+					<model>
+						<localizable>false</localizable>
+						<collection>false</collection>
+						<type>String</type>
+						<primaryKey>true</primaryKey>
+					</model>
+				</attribute>
+				<attribute>
+					<name>url</name>
+					<model>
+						<localizable>false</localizable>
+						<collection>false</collection>
+						<type>String</type>
+						<primaryKey>false</primaryKey>
+					</model>
+				</attribute>
+				<attribute>
+					<name>buildUrl</name>
+					<model>
+						<localizable>false</localizable>
+						<collection>false</collection>
+						<type>String</type>
+						<primaryKey>false</primaryKey>
+					</model>
+				</attribute>
+				<attribute>
+					<name>buildFullUrl</name>
+					<model>
+						<localizable>false</localizable>
+						<collection>false</collection>
+						<type>String</type>
+						<primaryKey>false</primaryKey>
+					</model>
+				</attribute>
+				<attribute>
+					<name>buildNumber</name>
+					<model>
+						<localizable>false</localizable>
+						<collection>false</collection>
+						<type>String</type>
+						<primaryKey>false</primaryKey>
+					</model>
+				</attribute>
+				<attribute>
+					<name>buildPhase</name>
+					<model>
+						<localizable>false</localizable>
+						<collection>false</collection>
+						<type>String</type>
+						<primaryKey>false</primaryKey>
+					</model>
+				</attribute>
+				<attribute>
+					<name>buildStatus</name>
+					<model>
+						<localizable>false</localizable>
+						<collection>false</collection>
+						<type>String</type>
+						<primaryKey>false</primaryKey>
+					</model>
+				</attribute>
+			</attributes>
+		</item>
+	</canonicalItems>
+</extension>
