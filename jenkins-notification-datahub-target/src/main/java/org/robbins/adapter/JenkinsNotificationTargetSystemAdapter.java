@@ -40,7 +40,7 @@ public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
     private static final String TARGET_SYSTEM_TYPE = "JenkinsNotificationTargetSystemAdapter";
     private static final int PAGE_SIZE = 10;
     private static final String ACTION_NAME = "playSound";
-    private static final String ACTION_VALUE = "TPS_REPORT.wav";
+    private static final String ACTION_VALUE = "tps_reports.wav";
 
     private PublicationActionService publicationActionService;
     private PiActionClient piActionClient;
