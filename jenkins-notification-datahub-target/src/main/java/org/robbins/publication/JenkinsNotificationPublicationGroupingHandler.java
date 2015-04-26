@@ -22,6 +22,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
@@ -37,7 +38,9 @@ public class JenkinsNotificationPublicationGroupingHandler implements Publicatio
 
 	private static final String CANONINICAL_TYPE = "JenkinsNotificationCanonicalItem";
 	private static final String BUID_STATUS = "buildStatus";
-	private static final String STATUS = "SUCCESS";
+
+    @Value("#{'${publishable.status.list}'.split(',')}")
+	private List<String> publishableStatuses;
 
 	private int order;
 
@@ -45,7 +48,7 @@ public class JenkinsNotificationPublicationGroupingHandler implements Publicatio
 	public <T extends CanonicalItem> List<T> group(T item, TargetItemCreationContext context)
 	{
 		logger.debug("Grouping CanonicalItem: " + item.toString());
-		return item.getField(BUID_STATUS).equals(STATUS) ? new ArrayList<>() : Arrays.asList(item);
+		return publishableStatuses.contains(item.getField(BUID_STATUS)) ? Arrays.asList(item) : new ArrayList<>();
 	}
 
 	@Override

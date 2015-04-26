@@ -11,23 +11,32 @@
  */
 package org.robbins.dto;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.NONE)
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class Build
 {
-	private String status;
+    @XmlElement
+    private String status;
 
-	private String number;
+    @XmlElement
+    private String number;
 
-	private String full_url;
+    @XmlElement
+    private String full_url;
 
-	private String phase;
+    @XmlElement
+    private String phase;
 
-	private String url;
+    @XmlElement
+    private String url;
 
 	public String getStatus ()
 	{

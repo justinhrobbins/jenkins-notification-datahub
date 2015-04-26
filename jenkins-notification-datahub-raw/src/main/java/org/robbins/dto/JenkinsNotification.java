@@ -11,19 +11,26 @@
  */
 package org.robbins.dto;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.NONE)
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class JenkinsNotification
 {
-	private String name;
+    @XmlElement
+    private String name;
 
-	private Build build;
+    @XmlElement
+    private Build build;
 
-	private String url;
+    @XmlElement
+    private String url;
 
 	public String getName ()
 	{

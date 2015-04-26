@@ -33,6 +33,7 @@ import org.robbins.raspberry.pi.model.PiAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 
 public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
 
@@ -40,7 +41,12 @@ public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
     private static final String TARGET_SYSTEM_TYPE = "JenkinsNotificationTargetSystemAdapter";
     private static final int PAGE_SIZE = 10;
     private static final String ACTION_NAME = "playSound";
-    private static final String ACTION_VALUE = "tps_reports.wav";
+
+    @Value("${success.sound}")
+    private String failureSound;
+
+    @Value("${failure.sound}")
+    private String successSound;
 
     private PublicationActionService publicationActionService;
     private PiActionClient piActionClient;
@@ -101,9 +107,14 @@ public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
     {
         PiAction piAction = new PiAction();
         piAction.setName(ACTION_NAME);
-        piAction.setValue(ACTION_VALUE);
+        piAction.setValue(getActionValue(targetItem));
         logger.debug(piAction.toString());
         return piAction;
+    }
+
+    private String getActionValue(final JenkinsNotificationTargetItem targetItem)
+    {
+        return targetItem.getField("buildStatus").equals("SUCCESS") ? successSound : failureSound;
     }
 
     private ErrorData buildPublicationError(final TargetItem targetItem, final Exception e)
