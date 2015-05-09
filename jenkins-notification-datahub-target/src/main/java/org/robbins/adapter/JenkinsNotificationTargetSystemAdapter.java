@@ -13,7 +13,6 @@ package org.robbins.adapter;
 
 import com.hybris.datahub.adapter.AdapterService;
 import com.hybris.datahub.api.publication.PublicationException;
-import com.hybris.datahub.domain.TargetItemMetadata;
 import com.hybris.datahub.dto.item.ErrorData;
 import com.hybris.datahub.dto.publication.PublicationResult;
 import com.hybris.datahub.model.TargetItem;
@@ -22,10 +21,6 @@ import com.hybris.datahub.paging.DataHubPageable;
 import com.hybris.datahub.paging.DefaultDataHubPageRequest;
 import com.hybris.datahub.runtime.domain.TargetSystemPublication;
 import com.hybris.datahub.service.PublicationActionService;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.robbins.domain.JenkinsNotificationTargetItem;
 import org.robbins.raspberry.pi.client.PiActionClient;
@@ -34,6 +29,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
 
@@ -67,23 +65,20 @@ public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
         logger.info("Publishing {}", targetSystemPublication);
 
         final List<ErrorData> errors = new ArrayList<>();
-        for (TargetItemMetadata itemMetadata : targetSystemPublication.getTargetSystem().getTargetItemMetadata())
-        {
-            final Class<? extends TargetItem> targetItemType = TargetItem.getItemClass(itemMetadata.getItemType());
-            int pageNumber = 0;
-            List<? extends TargetItem> items;
-            do
-            {
-                final DataHubPageable pageable = new DefaultDataHubPageRequest(pageNumber, PAGE_SIZE);
-                DataHubPage<? extends TargetItem> page = publicationActionService.findByPublication(targetSystemPublication.getPublicationId(), targetItemType, pageable);
-                items = page.getContent();
-                for (final TargetItem targetItem : items)
-                {
-                    sendTargetItem(targetItem, errors);
-                }
-                pageNumber ++;
-            } while(CollectionUtils.isNotEmpty(items));
-        }
+        targetSystemPublication.getTargetSystem().getTargetItemMetadata().stream()
+                .forEach(itemMetadata -> {
+                    final Class<? extends TargetItem> targetItemType = TargetItem.getItemClass(itemMetadata.getItemType());
+                    int pageNumber = 0;
+                    List<? extends TargetItem> items;
+                    do
+                    {
+                        final DataHubPageable pageable = new DefaultDataHubPageRequest(pageNumber, PAGE_SIZE);
+                        DataHubPage<? extends TargetItem> page = publicationActionService.findByPublication(targetSystemPublication.getPublicationId(), targetItemType, pageable);
+                        items = page.getContent();
+                        items.forEach(targetItem -> sendTargetItem(targetItem, errors));
+                        pageNumber ++;
+                    } while(CollectionUtils.isNotEmpty(items));
+                });
         return errors;
     }
 
