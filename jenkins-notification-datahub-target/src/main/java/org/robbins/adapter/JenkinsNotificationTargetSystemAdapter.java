@@ -38,13 +38,17 @@ public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
     private static final Logger logger = LoggerFactory.getLogger(JenkinsNotificationTargetSystemAdapter.class);
     private static final String TARGET_SYSTEM_TYPE = "JenkinsNotificationTargetSystemAdapter";
     private static final int PAGE_SIZE = 10;
-    private static final String ACTION_NAME = "playSound";
+    private static final String SOUND_ACTION_NAME = "playSound";
+    private static final String BLINK_LIGHT_ACTION_NAME = "blinkLight";
 
     @Value("${success.sound}")
     private String failureSound;
 
     @Value("${failure.sound}")
     private String successSound;
+
+    @Value("${light.blink.duration}")
+    private String blinkDuration;
 
     private PublicationActionService publicationActionService;
     private PiActionClient piActionClient;
@@ -87,9 +91,11 @@ public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
         try {
             if (targetItem instanceof JenkinsNotificationTargetItem)
             {
-                PiAction piAction = createPiActionFromTargetItem((JenkinsNotificationTargetItem)targetItem);
-
-                piActionClient.postAction(piAction);
+                JenkinsNotificationTargetItem jenkinsNotificationTargetItem = (JenkinsNotificationTargetItem)targetItem;
+                invokeSoundAction(jenkinsNotificationTargetItem);
+                if (!isSuccessfulBuild(jenkinsNotificationTargetItem)) {
+                    invokeLightAction(jenkinsNotificationTargetItem);
+                }
             }
         }
         catch (Exception e) {
@@ -98,18 +104,41 @@ public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
         }
     }
 
-    private PiAction createPiActionFromTargetItem(final JenkinsNotificationTargetItem targetItem)
+    private boolean isSuccessfulBuild(JenkinsNotificationTargetItem targetItem) {
+        return targetItem.getField("buildStatus").equals("SUCCESS");
+    }
+
+    private void invokeSoundAction(final JenkinsNotificationTargetItem targetItem) {
+        PiAction piAction = createSoundActionFromTargetItem(targetItem);
+        piActionClient.postAction(piAction);
+    }
+
+    private void invokeLightAction(final JenkinsNotificationTargetItem targetItem) {
+        PiAction piAction = createLightActionFromTargetItem(targetItem);
+        piActionClient.postAction(piAction);
+    }
+
+    private PiAction createSoundActionFromTargetItem(final JenkinsNotificationTargetItem targetItem)
     {
         PiAction piAction = new PiAction();
-        piAction.setName(ACTION_NAME);
+        piAction.setName(SOUND_ACTION_NAME);
         piAction.setValue(getActionValue(targetItem));
+        logger.debug(piAction.toString());
+        return piAction;
+    }
+
+    private PiAction createLightActionFromTargetItem(final JenkinsNotificationTargetItem targetItem)
+    {
+        PiAction piAction = new PiAction();
+        piAction.setName(BLINK_LIGHT_ACTION_NAME);
+        piAction.setValue(blinkDuration);
         logger.debug(piAction.toString());
         return piAction;
     }
 
     private String getActionValue(final JenkinsNotificationTargetItem targetItem)
     {
-        return targetItem.getField("buildStatus").equals("SUCCESS") ? successSound : failureSound;
+        return isSuccessfulBuild(targetItem) ? successSound : failureSound;
     }
 
     private ErrorData buildPublicationError(final TargetItem targetItem, final Exception e)
