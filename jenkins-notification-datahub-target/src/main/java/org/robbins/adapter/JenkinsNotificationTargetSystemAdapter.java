@@ -47,8 +47,11 @@ public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
     @Value("${failure.sound}")
     private String successSound;
 
-    @Value("${light.blink.duration}")
-    private String blinkDuration;
+    @Value("${failure.color}")
+    private String failureColor;
+
+    @Value("${success.color}")
+    private String successColor;
 
     private PublicationActionService publicationActionService;
     private PiActionClient piActionClient;
@@ -92,10 +95,9 @@ public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
             if (targetItem instanceof JenkinsNotificationTargetItem)
             {
                 JenkinsNotificationTargetItem jenkinsNotificationTargetItem = (JenkinsNotificationTargetItem)targetItem;
+
                 invokeSoundAction(jenkinsNotificationTargetItem);
-                if (!isSuccessfulBuild(jenkinsNotificationTargetItem)) {
-                    invokeLightAction(jenkinsNotificationTargetItem);
-                }
+                invokeLightAction(jenkinsNotificationTargetItem);
             }
         }
         catch (Exception e) {
@@ -122,7 +124,7 @@ public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
     {
         PiAction piAction = new PiAction();
         piAction.setName(SOUND_ACTION_NAME);
-        piAction.setValue(getActionValue(targetItem));
+        piAction.setValue(isSuccessfulBuild(targetItem) ? successSound : failureSound);
         logger.debug(piAction.toString());
         return piAction;
     }
@@ -131,14 +133,9 @@ public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
     {
         PiAction piAction = new PiAction();
         piAction.setName(BLINK_LIGHT_ACTION_NAME);
-        piAction.setValue(blinkDuration);
+        piAction.setValue(isSuccessfulBuild(targetItem) ? successColor : failureColor);
         logger.debug(piAction.toString());
         return piAction;
-    }
-
-    private String getActionValue(final JenkinsNotificationTargetItem targetItem)
-    {
-        return isSuccessfulBuild(targetItem) ? successSound : failureSound;
     }
 
     private ErrorData buildPublicationError(final TargetItem targetItem, final Exception e)
