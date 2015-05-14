@@ -47,12 +47,6 @@ public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
     @Value("${failure.sound}")
     private String successSound;
 
-    @Value("${failure.color}")
-    private String failureColor;
-
-    @Value("${success.color}")
-    private String successColor;
-
     private PublicationActionService publicationActionService;
     private PiActionClient piActionClient;
 
@@ -133,7 +127,7 @@ public class JenkinsNotificationTargetSystemAdapter implements AdapterService {
     {
         PiAction piAction = new PiAction();
         piAction.setName(BLINK_LIGHT_ACTION_NAME);
-        piAction.setValue(isSuccessfulBuild(targetItem) ? successColor : failureColor);
+        piAction.setValue(targetItem.getField("color").toString());
         logger.debug(piAction.toString());
         return piAction;
     }

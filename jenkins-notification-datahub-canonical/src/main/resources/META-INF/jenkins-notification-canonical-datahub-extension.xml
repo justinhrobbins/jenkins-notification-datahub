@@ -82,5 +82,28 @@
 				</attribute>
 			</attributes>
 		</item>
+        <item>
+            <type>StatusToColorLookupCanonicalItem</type>
+            <attributes>
+                <attribute>
+                    <name>buildStatus</name>
+                    <model>
+                        <localizable>false</localizable>
+                        <collection>false</collection>
+                        <type>String</type>
+                        <primaryKey>true</primaryKey>
+                    </model>
+                </attribute>
+                <attribute>
+                    <name>color</name>
+                    <model>
+                        <localizable>false</localizable>
+                        <collection>false</collection>
+                        <type>String</type>
+                        <primaryKey>false</primaryKey>
+                    </model>
+                </attribute>
+            </attributes>
+        </item>
 	</canonicalItems>
 </extension>

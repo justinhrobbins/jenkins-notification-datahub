@@ -44,6 +44,17 @@
 				</attribute>
 			</attributes>
 		</item>
+        <item>
+            <type>StatusToColorLookupRawItem</type>
+            <attributes>
+                <attribute>
+                    <name>buildStatus</name>
+                </attribute>
+                <attribute>
+                    <name>color</name>
+                </attribute>
+            </attributes>
+        </item>
 	</rawItems>
 	<canonicalItems>
 		<item>
@@ -114,5 +125,28 @@
 				</attribute>
 			</attributes>
 		</item>
+        <item>
+            <type>StatusToColorLookupCanonicalItem</type>
+            <attributes>
+                <attribute>
+                    <name>buildStatus</name>
+                    <transformations>
+                        <transformation>
+                            <rawSource>StatusToColorLookupRawItem</rawSource>
+                            <expression>buildStatus</expression>
+                        </transformation>
+                    </transformations>
+                </attribute>
+                <attribute>
+                    <name>color</name>
+                    <transformations>
+                        <transformation>
+                            <rawSource>StatusToColorLookupRawItem</rawSource>
+                            <expression>color</expression>
+                        </transformation>
+                    </transformations>
+                </attribute>
+            </attributes>
+        </item>
 	</canonicalItems>
 </extension>

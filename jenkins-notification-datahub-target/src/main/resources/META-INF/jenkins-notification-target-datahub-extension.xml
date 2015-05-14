@@ -42,6 +42,12 @@
 							<collection>false</collection>
 							<transformationExpression>buildStatus</transformationExpression>
 						</attribute>
+                        <attribute>
+                            <name>color</name>
+                            <localizable>false</localizable>
+                            <collection>false</collection>
+                            <transformationExpression>resolve('StatusToColorLookupCanonicalItem', 'GLOBAL').color</transformationExpression>
+                        </attribute>
 					</attributes>
 				</item>
 			</targetItems>
