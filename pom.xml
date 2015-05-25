@@ -47,11 +47,6 @@
                 <type>war</type>
                 <scope>runtime</scope>
             </dependency>
-            <dependency>
-                <groupId>com.hybris.datahub</groupId>
-                <artifactId>csv-web-service</artifactId>
-                <version>${datahub.version}</version>
-            </dependency>
 
             <!-- jenkins-notification-datahub extenions -->
 			<dependency>
